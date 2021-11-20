@@ -20,7 +20,8 @@ router.post("/", async (req, res) => {
         destination: req.body.destination,
         location: req.body.location,
         name: req.body.name,
-        cpnum: req.body.cpnum
+        cpnum: req.body.cpnum,
+        NoOfPassengers: req.body.NoOfPassengers
       }).save();
   
       res.status(200).send(response);

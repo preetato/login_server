@@ -4,7 +4,8 @@ const ProcessSchema = mongoose.Schema({
   destination: String,
   location: String,
   name: String,
-  cpnum: Number
+  cpnum: Number,
+  NoOfPassengers: Number
 
 });
 
