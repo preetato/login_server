@@ -1,0 +1,18 @@
+POST http://localhost:3000/process
+Content-Type: application/json
+
+{
+    "destination" : "Solano242", 
+    "location":"new123422",
+  "user":"example ako22" ,
+  "cpnum":"911111122" ,
+  "NoOfPassengers":6
+}
+###
+DELETE http://localhost:3000/process/61a7c5502b5f9a9560f5cae8
+
+###
+DELETE http://localhost:3000/process
+
+###
+GET http://localhost:3000/process

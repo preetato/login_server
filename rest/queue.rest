@@ -1,0 +1,40 @@
+### get drivers list 
+GET http://localhost:3000/driver
+
+### CREATE QUEUE
+POST http://localhost:3000/queue/create
+Content-Type: application/json
+
+{
+    queue:[
+        {
+            driverId: 123190283, 
+            order: 0, 
+        }, {
+            driverId: 1203981023, 
+            order: 1, 
+        }
+    ]
+}
+
+###
+POST http://localhost:3000/user/signup
+Content-Type: application/json
+
+{
+    "name": "Janeo", 
+    "email": "rakiabodyjm@gmail.com", 
+    "password": "rakiabodyjm4690", 
+    "dateOfBirth": "09-19-1999",
+    
+}
+
+
+###SEND MESSAGE SAMPLE
+POST http://localhost:3000/process/send-message
+Content-Type: application/json
+
+{
+    "message": "Hello WOrld", 
+    "receiver" : "639281940205"
+}
