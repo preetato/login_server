@@ -56,6 +56,7 @@ router.post('/booking-cancelled', async (req, res) => {
     }
 
     let driverInfo = await getDriverFromQueue(queueId)
+
     console.log('driver Info is - ', driverInfo)
 
     await insertDriverWithSameOrderNumber(driverInfo)
@@ -82,6 +83,7 @@ router.post('/booking-rejected', async (req, res) => {
     }
 
     let driverInfo = await getDriverFromQueue(queueId)
+
     console.log('driver Info is - ', driverInfo)
 
     await insertDriverInLast(driverInfo)
@@ -91,7 +93,7 @@ router.post('/booking-rejected', async (req, res) => {
       message: 'Trip was rejected',
     })
   } catch (err) {
-    console.erorr(err.message)
+    console.error(err.message)
     return res.status(500).send({
       error: err.message,
     })
@@ -123,6 +125,7 @@ router.post('/end-driver-trip', async (req, res) => {
     }
 
     let driverInfo = await getDriverFromQueue(queueId)
+
     console.log('driver Info is - ', driverInfo)
 
     await insertDriverInLast(driverInfo)
@@ -172,7 +175,15 @@ const getOneDriverAndPutToQueue = async () => {
 }
 
 const getDriverFromQueue = async (queueId) => {
-  return await Queue.findById(queueId)
+  const queue = await Queue.findById(queueId).catch((err) => {
+    throw new Error(err.message)
+  })
+  if (!queue) {
+    throw new Error(`Driver not found from queue 
+        Might be from wrong queueId Given
+      `)
+  }
+  return queue
 }
 
 const insertDriverWithSameOrderNumber = async (driverInfo) => {
