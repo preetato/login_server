@@ -4,7 +4,7 @@ POST http://localhost:3000/process
 Content-Type: application/json
 
 {
-    "destination" : "desti 123", 
+    "destination" : "destinations 22", 
     "location":"dest 2",
   "user":"example ako22" ,
   "cpnum":"911111122" ,
@@ -28,7 +28,7 @@ POST http://localhost:3000/queue/booking
 Content-Type: application/json
 
 {
-    "processId": "61b60fd61742cf4ad5734f02"
+    "processId": "61e2f576cea94101e5771fac"
 }
 
 ###CHECK DRIVERS AFTER
@@ -42,19 +42,22 @@ POST http://localhost:3000/queue/booking-rejected
 Content-Type: application/json
 
 {
-    "queueId": "61b60fed1742cf4ad5734f09"
+    "queueId": "61e2fed8cea94101e5771fe5"
 }
-###
 
-POST http://localhost:3000/queue/booking-cancelled
-Content-Type: application/json
 
-{
-    "queueId": "61b5d75f10cd45dbd7fffc1b"
-}
+# POST http://localhost:3000/queue/booking-cancelled
+# Content-Type: application/json
+
+# {
+#     "queueId": "61b5d75f10cd45dbd7fffc1b"
+# }
 
 ###
 GET http://localhost:3000/queue/move-drivers-from-queue
 
 ###CHECK DRIVERS AFTER
 DELETE  http://localhost:3000/driver
+
+###
+GET 

@@ -7,6 +7,11 @@ const ProcessSchema = new mongoose.Schema(
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
     cpnum: Number,
     NoOfPassengers: Number,
+    status: {
+      type: String,
+      enum: ['COMPLETE', 'CANCELLED', 'REJECTED', 'ONGOING'],
+      default: 'ONGOING',
+    },
   },
   {
     timestamps: {

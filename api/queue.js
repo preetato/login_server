@@ -48,7 +48,33 @@ router.post('/booking-cancelled', async (req, res) => {
   //queued driver when returned to driver table,
   // ordernumber is not changed
   try {
-    const { queueId } = req.body
+    const { queueId, processId } = req.body
+    if (!processId) {
+      return res.status(400).send({
+        error: 'Process Id is required',
+      })
+    }
+
+    // const updatedqueue = await Queue.findOne(processId, async (err, doc) => {
+    //   if (err) {
+    //     throw new Error(err)
+    //   }
+    //   await doc.save({
+    //     status: 'CANCELLED',
+    //   })
+    // })
+    await Process.findByIdAndUpdate(
+      processId,
+      {
+        $set: {
+          status: 'CANCELLED',
+        },
+      },
+      {
+        new: true,
+      }
+    )
+
     if (!queueId) {
       return res.status(400).send({
         error: 'Queue Id is required',
@@ -75,7 +101,24 @@ router.post('/booking-cancelled', async (req, res) => {
 router.post('/booking-rejected', async (req, res) => {
   //ordernumbe changed to last highest ordernumber
   try {
-    const { queueId } = req.body
+    const { queueId, processId } = req.body
+    if (!processId) {
+      return res.status(400).send({
+        error: 'Process Id is required',
+      })
+    }
+    await Process.findByIdAndUpdate(
+      processId,
+      {
+        $set: {
+          status: 'REJECTED',
+        },
+      },
+      {
+        new: true,
+      }
+    )
+
     if (!queueId) {
       return res.status(400).send({
         error: 'Queue Id is required',
@@ -117,7 +160,24 @@ router.post('/end-driver-trip', async (req, res) => {
   //send mesasge to driver that the customer has ended trip
   //from queue to driver table
   try {
-    const { queueId } = req.body
+    const { queueId, processId } = req.body
+    if (!processId) {
+      return res.status(400).send({
+        error: 'Process Id is required',
+      })
+    }
+    await Process.findByIdAndUpdate(
+      processId,
+      {
+        $set: {
+          status: 'COMPLETE',
+        },
+      },
+      {
+        new: true,
+      }
+    )
+
     if (!queueId) {
       return res.status(400).send({
         error: 'Queue Id is required',
