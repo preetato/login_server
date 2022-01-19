@@ -1,0 +1,7 @@
+POST http://localhost:3000/queue/send-trial-twilio
+Content-Type: application/json
+
+{
+    "to": "+639281940205",
+    "message": "micheal whatsup"
+}
