@@ -371,6 +371,116 @@ const returnDriverFromQueue = async ({ queueId, putToLast }) => {
   }
 }
 
+function bookingmessage({
+  destination,
+  location,
+  drivercpnum,
+  cpnum,
+  NoOfPassengers,
+  name,
+}) {
+  const twilioClient = twilio(
+    process.env.TWILIO_ACCCOUNT_SID,
+    process.env.TWILIO_AUTH_TOKEN
+  )
+  if (!/\+63[0-9]{10}$/.test(drivercpnum, cpnum)) {
+    throw new Error(
+      'Invalid Phone number length or format: start with +63 and should be 13 characters long'
+    )
+  }
+
+  return twilioClient.messages
+    .create({
+      body:
+        ('there are',
+        NoOfPassengers,
+        ' passenger/s at ',
+        location,
+        'that wants to travel to ',
+        destination,
+        ' please message ',
+        name,
+        ' at ',
+        cpnum,
+        'If you want to pick them up'),
+      from: process.env.TWILIO_PHONE_NUMBER,
+      to: drivercpnum,
+    })
+    .then((res) => {
+      return res.toJSON()
+    })
+    .catch((err) => {
+      console.log('Sending Message Error', err)
+      throw new Error(err)
+    })
+}
+
+function cancelmessage({ name, location, drivercpnum, cpnum, NoOfPassengers }) {
+  const twilioClient = twilio(
+    process.env.TWILIO_ACCCOUNT_SID,
+    process.env.TWILIO_AUTH_TOKEN
+  )
+  if (!/\+63[0-9]{10}$/.test(drivercpnum, cpnum)) {
+    throw new Error(
+      'Invalid Phone number length or format: start with +63 and should be 13 characters long'
+    )
+  }
+
+  return twilioClient.messages
+    .create({
+      body:
+        ('the booking made by ',
+          name,
+          'with',
+        NoOfPassengers,
+        ' passenger/s at ',
+        location,
+        'has been cancelled',),
+      from: process.env.TWILIO_PHONE_NUMBER,
+      to: drivercpnum,
+    })
+    .then((res) => {
+      return res.toJSON()
+    })
+    .catch((err) => {
+      console.log('Sending Message Error', err)
+      throw new Error(err)
+    })
+}
+
+function rejectedmessage({ name, location, drivercpnum, cpnum, NoOfPassengers }) {
+  const twilioClient = twilio(
+    process.env.TWILIO_ACCCOUNT_SID,
+    process.env.TWILIO_AUTH_TOKEN
+  )
+  if (!/\+63[0-9]{10}$/.test(drivercpnum, cpnum)) {
+    throw new Error(
+      'Invalid Phone number length or format: start with +63 and should be 13 characters long'
+    )
+  }
+
+  return twilioClient.messages
+    .create({
+      body:
+        ('you have rejected the booking made by ',
+          name,
+          'with',
+        NoOfPassengers,
+        ' passenger/s at ',
+        location,),
+      from: process.env.TWILIO_PHONE_NUMBER,
+      to: drivercpnum,
+    })
+    .then((res) => {
+      return res.toJSON()
+    })
+    .catch((err) => {
+      console.log('Sending Message Error', err)
+      throw new Error(err)
+    })
+}
+
+
 function sendMessage({ to, message }) {
   const twilioClient = twilio(
     process.env.TWILIO_ACCCOUNT_SID,
