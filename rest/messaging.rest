@@ -2,6 +2,6 @@ POST http://localhost:3000/queue/send-trial-twilio
 Content-Type: application/json
 
 {
-    "to": "+639281940205",
+    "to": "+639369062840",
     "message": "micheal whatsup"
 }
