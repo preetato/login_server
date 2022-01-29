@@ -2,11 +2,11 @@ POST http://localhost:3000/process
 Content-Type: application/json
 
 {
-    "destination" : "Solano242", 
-    "location":"new123422",
-  "user":"example ako22" ,
+  "destination" : "Solanotesting", 
+  "location":"bay testing",
+  "user":"testing" ,
   "cpnum":"911111122" ,
-  "NoOfPassengers":6
+  "NoOfPassengers":2
 }
 ###
 DELETE http://localhost:3000/process/61a7c5502b5f9a9560f5cae8
@@ -16,3 +16,15 @@ DELETE http://localhost:3000/process
 
 ###
 GET http://localhost:3000/process
+
+
+###
+POST http://localhost:3000/driver
+Content-Type: application/json
+
+{
+  "drivername": "testing mich 4",
+  "driveraddress": "here",
+  "platenumber": "there",
+  "drivercpnum": "+639281940205"
+}

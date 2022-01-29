@@ -28,7 +28,7 @@ POST http://localhost:3000/queue/booking
 Content-Type: application/json
 
 {
-    "processId": "61e2f576cea94101e5771fac"
+    "processId": "61f2a2322fe97890c68009b6"
 }
 
 ###CHECK DRIVERS AFTER
@@ -42,7 +42,7 @@ POST http://localhost:3000/queue/booking-rejected
 Content-Type: application/json
 
 {
-    "queueId": "61e2fed8cea94101e5771fe5"
+    "queueId": "61f2a70ffa49660e641a0bfc"
 }
 
 
@@ -59,5 +59,3 @@ GET http://localhost:3000/queue/move-drivers-from-queue
 ###CHECK DRIVERS AFTER
 DELETE  http://localhost:3000/driver
 
-###
-GET 
