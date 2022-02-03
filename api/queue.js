@@ -70,9 +70,6 @@ router.post('/booking', async (req, res) => {
       cpnum,
       NoOfPassengers,
     })
-    await new Logs({
-      drivercpnum,
-    })
   } catch (err) {
     console.log('Booking message error', err)
     throw new Error(err)
@@ -124,13 +121,44 @@ router.post('/booking-cancelled', async (req, res) => {
     await insertDriverWithSameOrderNumber(driverInfo)
     await Queue.findByIdAndDelete(queueId)
 
-    return res.status(200).send({
+    res.status(200).send({
       message: 'Trip was cancelled',
     })
   } catch (err) {
     return res.status(500).send({
       error: err.message,
     })
+  }
+
+  try {
+    const { processId, queueId } = req.body
+    const process = await Process.findById(processId)
+    const getDriver = await getDriverFromQueue(queueId)
+
+    const drivercpnum = getDriver.drivercpnum
+    const location = process.location
+    const destination = process.destination
+    const cpnum = process.cpnum
+    const NoOfPassengers = process.NoOfPassengers
+
+    console.log(drivercpnum, 'driver number')
+    console.log(getDriver, 'driver number')
+    console.log(location, 'location')
+    console.log(destination, 'destination')
+    console.log(cpnum, 'passenger cp num')
+    console.log(NoOfPassengers, 'number of passengers')
+    console.log(drivercpnum, 'driver number')
+
+    cancelmessage({
+      destination,
+      location,
+      drivercpnum,
+      cpnum,
+      NoOfPassengers,
+    })
+  } catch (err) {
+    console.log('Booking message error', err)
+    throw new Error(err)
   }
 })
 
@@ -168,7 +196,7 @@ router.post('/booking-rejected', async (req, res) => {
     await insertDriverInLast(driverInfo)
     await Queue.findByIdAndDelete(queueId)
 
-    return res.status(200).send({
+    res.status(200).send({
       message: 'Trip was rejected',
     })
   } catch (err) {
@@ -176,6 +204,37 @@ router.post('/booking-rejected', async (req, res) => {
     return res.status(500).send({
       error: err.message,
     })
+  }
+
+  try {
+    const { processId, queueId } = req.body
+    const process = await Process.findById(processId)
+    const getDriver = await getDriverFromQueue(queueId)
+
+    const drivercpnum = getDriver.drivercpnum
+    const location = process.location
+    const destination = process.destination
+    const cpnum = process.cpnum
+    const NoOfPassengers = process.NoOfPassengers
+
+    console.log(drivercpnum, 'driver number')
+    console.log(getDriver, 'driver number')
+    console.log(location, 'location')
+    console.log(destination, 'destination')
+    console.log(cpnum, 'passenger cp num')
+    console.log(NoOfPassengers, 'number of passengers')
+    console.log(drivercpnum, 'driver number')
+
+    rejectedmessage({
+      destination,
+      location,
+      drivercpnum,
+      cpnum,
+      NoOfPassengers,
+    })
+  } catch (err) {
+    console.log('Booking message error', err)
+    throw new Error(err)
   }
 })
 
@@ -463,12 +522,12 @@ function bookingmessage({
     })
 }
 
-function cancelmessage({ name, location, drivercpnum, cpnum, NoOfPassengers }) {
+function cancelmessage({ location, drivercpnum, cpnum, NoOfPassengers }) {
   const twilioClient = twilio(
     process.env.TWILIO_ACCCOUNT_SID,
     process.env.TWILIO_AUTH_TOKEN
   )
-  if (!/\+63[0-9]{10}$/.test(drivercpnum, cpnum)) {
+  if (!/\+63[0-9]{10}$/.test(drivercpnum)) {
     throw new Error(
       'Invalid Phone number length or format: start with +63 and should be 13 characters long'
     )
@@ -477,13 +536,13 @@ function cancelmessage({ name, location, drivercpnum, cpnum, NoOfPassengers }) {
   return twilioClient.messages
     .create({
       body:
-        ('the booking made by ',
-        name,
-        'with',
-        NoOfPassengers,
-        ' passenger/s at ',
-        location,
-        'has been cancelled'),
+        'the booking made by ' +
+        cpnum +
+        'with' +
+        NoOfPassengers +
+        ' passenger/s at ' +
+        location +
+        'has been cancelled',
       from: process.env.TWILIO_PHONE_NUMBER,
       to: drivercpnum,
     })
@@ -496,13 +555,7 @@ function cancelmessage({ name, location, drivercpnum, cpnum, NoOfPassengers }) {
     })
 }
 
-function rejectedmessage({
-  name,
-  location,
-  drivercpnum,
-  cpnum,
-  NoOfPassengers,
-}) {
+function rejectedmessage({ location, drivercpnum, cpnum, NoOfPassengers }) {
   const twilioClient = twilio(
     process.env.TWILIO_ACCCOUNT_SID,
     process.env.TWILIO_AUTH_TOKEN
@@ -517,7 +570,7 @@ function rejectedmessage({
     .create({
       body:
         ('you have rejected the booking made by ',
-        name,
+        cpnum,
         'with',
         NoOfPassengers,
         ' passenger/s at ',
